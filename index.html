@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Liquid Glass - Instagram Rozeti (marstegstudy)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: transparent !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .ig-stage {
+      position: fixed;
+      bottom: 36px;
+      left: 44px;
+      display: inline-block;
+      user-select: none;
+    }
+
+    /* Çerçeve dışına yayılan yumuşak Instagram ışık halesi */
+    .ig-outer-aura {
+      position: absolute;
+      inset: 0;
+      border-radius: 27px;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow:
+        0 0 22px 2px rgba(193, 53, 132, 0.30),
+        0 0 34px 4px rgba(247, 119, 55, 0.18);
+      animation: igSyncPulse 12s ease-in-out infinite;
+    }
+
+    /* Ana renksiz Liquid Glass kapsül */
+    .ig-glass-pill {
+      position: relative;
+      height: 54px;
+      padding: 0 22px 0 18px;
+      border-radius: 27px;
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.10) 0%,
+        rgba(255, 255, 255, 0.025) 50%,
+        rgba(18, 12, 16, 0.12) 100%
+      );
+      backdrop-filter: blur(15px) saturate(145%);
+      -webkit-backdrop-filter: blur(15px) saturate(145%);
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.46),
+        0 3px 8px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+      transform: translateZ(0);
+    }
+
+    /* Üst cam yüzey yansıması */
+    .ig-top-sheen {
+      position: absolute;
+      inset: 0;
+      border-radius: 27px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.22) 0%,
+        rgba(255, 255, 255, 0.04) 42%,
+        rgba(0, 0, 0, 0) 62%,
+        rgba(255, 255, 255, 0.09) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Cam üzerinden süzülen ince ışık yansıması */
+    .ig-ambient-shimmer {
+      position: absolute;
+      top: -20%;
+      left: 0;
+      width: 55%;
+      height: 140%;
+      background: linear-gradient(
+        105deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.04) 35%,
+        rgba(255, 255, 255, 0.20) 50%,
+        rgba(255, 255, 255, 0.04) 65%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: liquidShimmer 12s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    @keyframes liquidShimmer {
+      0%, 42% {
+        transform: translateX(-130%) skewX(-18deg);
+        opacity: 0;
+      }
+      54% {
+        opacity: 1;
+      }
+      76% {
+        opacity: 1;
+      }
+      85%, 100% {
+        transform: translateX(260%) skewX(-18deg);
+        opacity: 0;
+      }
+    }
+
+    /* İç cam kenar kalınlıkları */
+    .ig-rim-base,
+    .ig-rim-color {
+      position: absolute;
+      inset: 0;
+      border-radius: 27px;
+      pointer-events: none;
+    }
+
+    .ig-rim-base {
+      box-shadow:
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.18),
+        inset 0 0 8px 0.5px rgba(255, 235, 225, 0.15);
+    }
+
+    .ig-rim-color {
+      opacity: 0;
+      box-shadow:
+        inset 0 2px 6px rgba(255, 185, 140, 0.36),
+        inset 0 -2px 6px rgba(175, 105, 235, 0.30),
+        inset 0 0 14px 2px rgba(225, 65, 120, 0.22);
+      animation: igSyncPulse 12s ease-in-out infinite;
+    }
+
+    /* Kapsülün tam dış sınırına sıfır kaymayla oturan vektörel çerçeve */
+    .ig-vector-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 27px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ig-vector-color-stroke {
+      opacity: 0;
+      animation: igSyncPulse 12s ease-in-out infinite;
+    }
+
+    @keyframes igSyncPulse {
+      0%, 38%, 90%, 100% {
+        opacity: 0;
+      }
+      56%, 72% {
+        opacity: 1;
+      }
+    }
+
+    /* İkon katmanları */
+    .ig-icon-wrap {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .ig-icon-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ig-icon-base {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.65));
+    }
+
+    .ig-icon-glow {
+      opacity: 0;
+      filter:
+        drop-shadow(0 0 6px rgba(225, 48, 108, 0.55))
+        drop-shadow(0 0 11px rgba(247, 119, 55, 0.32))
+        drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+      animation: igSyncPulse 12s ease-in-out infinite;
+    }
+
+    .ig-handle {
+      position: relative;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      line-height: 1;
+      color: #F4EBD0;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+    }
+  </style>
+</head>
+<body>
+  <div class="ig-stage">
+    <div class="ig-outer-aura"></div>
+
+    <div class="ig-glass-pill">
+      <div class="ig-top-sheen"></div>
+      <div class="ig-ambient-shimmer"></div>
+
+      <div class="ig-icon-wrap">
+        <div class="ig-icon-layer ig-icon-base">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="igGlassGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F4EBD0" />
+                <stop offset="52%" stop-color="#FFFFFF" />
+                <stop offset="100%" stop-color="#FFD6DC" />
+              </linearGradient>
+            </defs>
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="url(#igGlassGrad)" stroke-width="2.1" />
+            <circle cx="12" cy="12" r="4.3" stroke="url(#igGlassGrad)" stroke-width="2.1" />
+            <circle cx="17.5" cy="6.5" r="1.3" fill="url(#igGlassGrad)" />
+          </svg>
+        </div>
+
+        <div class="ig-icon-layer ig-icon-glow">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="igBrandGlowGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FCAF45" />
+                <stop offset="30%" stop-color="#F77737" />
+                <stop offset="65%" stop-color="#E1306C" />
+                <stop offset="100%" stop-color="#9B4DCA" />
+              </linearGradient>
+            </defs>
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="url(#igBrandGlowGrad)" stroke-width="2.2" />
+            <circle cx="12" cy="12" r="4.3" stroke="url(#igBrandGlowGrad)" stroke-width="2.2" />
+            <circle cx="17.5" cy="6.5" r="1.35" fill="url(#igBrandGlowGrad)" />
+          </svg>
+        </div>
+      </div>
+
+      <span class="ig-handle">marstegstudy</span>
+
+      <div class="ig-rim-base"></div>
+      <div class="ig-rim-color"></div>
+
+      <svg class="ig-vector-frame">
+        <defs>
+          <linearGradient id="baseGlassStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.52" />
+            <stop offset="22%" stop-color="#FFFFFF" stop-opacity="0.24" />
+            <stop offset="35%" stop-color="#FFFFFF" stop-opacity="0.92" />
+            <stop offset="48%" stop-color="#F4EBD0" stop-opacity="0.58" />
+            <stop offset="62%" stop-color="#FFFFFF" stop-opacity="0.18" />
+            <stop offset="80%" stop-color="#FFFFFF" stop-opacity="0.32" />
+            <stop offset="92%" stop-color="#FFFFFF" stop-opacity="0.74" />
+            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.30" />
+          </linearGradient>
+
+          <linearGradient id="igColorStroke" x1="0%" y1="15%" x2="100%" y2="85%">
+            <stop offset="0%" stop-color="#A85FD7" stop-opacity="0.62" />
+            <stop offset="28%" stop-color="#DA5598" stop-opacity="0.62" />
+            <stop offset="48%" stop-color="#FFF5F0" stop-opacity="0.88" />
+            <stop offset="68%" stop-color="#EE5284" stop-opacity="0.62" />
+            <stop offset="88%" stop-color="#FA9155" stop-opacity="0.62" />
+            <stop offset="100%" stop-color="#FFC369" stop-opacity="0.58" />
+          </linearGradient>
+        </defs>
+
+        <rect x="0" y="0" width="100%" height="100%" rx="27" ry="27" fill="none" stroke="url(#baseGlassStroke)" stroke-width="2.5" vector-effect="non-scaling-stroke" />
+        <rect class="ig-vector-color-stroke" x="0" y="0" width="100%" height="100%" rx="27" ry="27" fill="none" stroke="url(#igColorStroke)" stroke-width="2.6" vector-effect="non-scaling-stroke" />
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
